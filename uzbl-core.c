@@ -2369,7 +2369,7 @@ gboolean
 key_press_cb (GtkWidget* window, GdkEventKey* event) {
     (void) window;
 
-    if(event->type == GDK_KEY_PRESS)
+    if(!uzbl.behave.insert_mode && event->type == GDK_KEY_PRESS)
         key_to_event(event->keyval, GDK_KEY_PRESS);
 
     return uzbl.behave.insert_mode ? FALSE : TRUE;
