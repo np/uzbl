@@ -992,6 +992,7 @@ struct {const char *key; CommandInfo value;} cmdlist[] =
      * the user, technically events and requests are the very same thing
     */
     { "request",               {event, 0}                     }, 
+    { "bind",                  {request_bind, TRUE}           },
     { "update_gui",            {update_gui, TRUE}             }
 };
 
@@ -1070,6 +1071,22 @@ event(WebKitWebView *page, GArray *argv, GString *result) {
     send_event(0, event_details?event_details:"", event_name->str);
 
     g_string_free(event_name, TRUE);
+    if(event_details)
+        g_free(event_details);
+}
+
+void
+request_bind(WebKitWebView *page, GArray *argv, GString *result) {
+    (void) page; (void) result;
+    gchar *event_details = NULL;
+
+    if(argv_idx(argv, 0))
+        event_details = parseenv(expand(argv_idx(argv, 0), 0));
+    else
+        return;
+
+    send_event(0, event_details?event_details:"", "BIND");
+
     if(event_details)
         g_free(event_details);
 }

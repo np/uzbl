@@ -473,6 +473,9 @@ update_gui(WebKitWebView *page, GArray *argv, GString *result);
 void
 event(WebKitWebView *page, GArray *argv, GString *result);
 
+void
+request_bind(WebKitWebView *page, GArray *argv, GString *result);
+
 gboolean
 configure_event_cb(GtkWidget* window, GdkEventConfigure* event);
 
