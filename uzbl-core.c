@@ -771,6 +771,19 @@ scroll_end(WebKitWebView* page, GArray *argv, GString *result) {
 }
 
 void
+scroll_begin_horiz(WebKitWebView* page, GArray *argv, GString *result) {
+    (void) page; (void) argv; (void) result;
+    gtk_adjustment_set_value (uzbl.gui.bar_h, gtk_adjustment_get_lower(uzbl.gui.bar_h));
+}
+
+void
+scroll_end_horiz(WebKitWebView* page, GArray *argv, GString *result) {
+    (void) page; (void) argv; (void) result;
+    gtk_adjustment_set_value (uzbl.gui.bar_h, gtk_adjustment_get_upper(uzbl.gui.bar_h) -
+                              gtk_adjustment_get_page_size(uzbl.gui.bar_h));
+}
+
+void
 scroll_vert(WebKitWebView* page, GArray *argv, GString *result) {
     (void) page; (void) result;
     scroll(uzbl.gui.bar_v, argv);
@@ -962,6 +975,8 @@ struct {const char *key; CommandInfo value;} cmdlist[] =
     { "scroll_horz",           {scroll_horz, 0}               },
     { "scroll_begin",          {scroll_begin, 0}              },
     { "scroll_end",            {scroll_end, 0}                },
+    { "scroll_begin_horiz",    {scroll_begin_horiz, 0}        },
+    { "scroll_end_horiz",      {scroll_end_horiz, 0}          },
     { "reload",                {view_reload, 0},              },
     { "reload_ign_cache",      {view_reload_bypass_cache, 0}  },
     { "stop",                  {view_stop_loading, 0},        },
