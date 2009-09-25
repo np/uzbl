@@ -2368,6 +2368,8 @@ create_browser () {
     g_object_connect((GObject*)g->web_view,
       "signal::key-press-event",                      (GCallback)key_press_cb,            NULL,
       "signal::key-release-event",                    (GCallback)key_release_cb,          NULL,
+      "signal::button-press-event",                   (GCallback)button_press_cb,
+      "signal::key-press-event",                      (GCallback)key_press_cb,            NULL,
       "signal::title-changed",                        (GCallback)title_change_cb,         NULL,
       "signal::selection-changed",                    (GCallback)selection_changed_cb,    NULL,
       "signal::load-progress-changed",                (GCallback)progress_change_cb,      NULL,
@@ -2398,7 +2400,7 @@ create_mainbar () {
 
     g_object_connect((GObject*)g->mainbar,
       "signal::key-press-event",                    (GCallback)key_press_cb,    NULL,
-      "button-press-event",                         (GCallback)button_press_cb, NULL,
+      "signal::button-press-event",                 (GCallback)button_press_cb, NULL,
       "signal::key-release-event",                  (GCallback)key_release_cb,  NULL,
       NULL);
 
