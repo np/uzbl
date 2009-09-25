@@ -2298,6 +2298,30 @@ configure_event_cb(GtkWidget* window, GdkEventConfigure* event) {
     return FALSE;
 }
 
+gboolean
+button_press_cb (GtkWidget* window, GdkEventButton* event)
+{
+    (void) window;
+    if(event->type != GDK_BUTTON_PRESS)
+        return FALSE;
+
+    if(event->button==2)
+    {
+        gchar* str=gtk_clipboard_wait_for_text (gtk_clipboard_get (GDK_SELECTION_PRIMARY));
+        if(str)
+       {
+            GString* keycmd = g_string_new(uzbl.state.keycmd);
+            g_string_append (keycmd, str);
+            uzbl.state.keycmd = g_string_free(keycmd, FALSE);
+            update_title ();
+            g_free (str);
+        }
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 void
 key_to_event(guint keyval, gint mode) {
     char byte[2];
@@ -2374,6 +2398,7 @@ create_mainbar () {
 
     g_object_connect((GObject*)g->mainbar,
       "signal::key-press-event",                    (GCallback)key_press_cb,    NULL,
+      "button-press-event",                         (GCallback)button_press_cb, NULL,
       "signal::key-release-event",                  (GCallback)key_release_cb,  NULL,
       NULL);
 
