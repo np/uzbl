@@ -2224,6 +2224,30 @@ configure_event_cb(GtkWidget* window, GdkEventConfigure* event) {
 }
 
 gboolean
+button_press_cb (GtkWidget* window, GdkEventButton* event)
+{
+    (void) window;
+    if(event->type != GDK_BUTTON_PRESS)
+        return FALSE;
+
+    if(event->button==2)
+    {
+        gchar* str=gtk_clipboard_wait_for_text (gtk_clipboard_get (GDK_SELECTION_PRIMARY));
+        if(str)
+       {
+            GString* keycmd = g_string_new(uzbl.state.keycmd);
+            g_string_append (keycmd, str);
+            uzbl.state.keycmd = g_string_free(keycmd, FALSE);
+            update_title ();
+            g_free (str);
+        }
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+gboolean
 key_press_cb (GtkWidget* window, GdkEventKey* event)
 {
     //TRUE to stop other handlers from being invoked for the event. FALSE to propagate the event further.
@@ -2391,6 +2415,7 @@ create_mainbar () {
     gtk_misc_set_padding (GTK_MISC(g->mainbar_label), 2, 2);
     gtk_box_pack_start (GTK_BOX (g->mainbar), g->mainbar_label, TRUE, TRUE, 0);
     g_signal_connect (G_OBJECT (g->mainbar), "key-press-event", G_CALLBACK (key_press_cb), NULL);
+    g_signal_connect (G_OBJECT (g->mainbar), "button-press-event", G_CALLBACK (button_press_cb), NULL);
     return g->mainbar;
 }
 
