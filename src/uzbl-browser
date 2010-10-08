@@ -60,7 +60,9 @@ DAEMON_PID=${DAEMON_SOCKET}.pid
 
 #if [ -f "$DAEMON_PID" ]
 #then
-	uzbl-event-manager -va start
+       uzbl-event-manager --server-socket "$DAEMON_SOCKET" \
+                          --pid-file "$DAEMON_PID" \
+                          -va start
 #fi
 
 exec uzbl-core "$@" --connect-socket $DAEMON_SOCKET
